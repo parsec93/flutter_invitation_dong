@@ -14,7 +14,7 @@ class PageVisibilityResolver {
   })  : this._pageMetrics = metrics,
         this._viewPortFraction = viewPortFraction;
 
-  final ScrollMetrics _pageMetrics;
+  final ScrollMetrics? _pageMetrics; // Update to allow nullable values
   final double _viewPortFraction;
 
   /// Calculates visibility information for the page at [pageIndex].
@@ -41,12 +41,11 @@ class PageVisibilityResolver {
 
   double _calculatePagePosition(int index) {
     final double viewPortFraction = _viewPortFraction ?? 1.0;
-    final double pageViewWidth =
-        (_pageMetrics?.viewportDimension ?? 1.0) * viewPortFraction;
+    final double pageViewWidth = (_pageMetrics?.viewportDimension ?? 1.0) * viewPortFraction;
     final double pageX = pageViewWidth * index;
     final double scrollX = (_pageMetrics?.pixels ?? 0.0);
     final double pagePosition = (pageX - scrollX) / pageViewWidth;
-    final double safePagePosition = !pagePosition.isNaN ? pagePosition : 0.0;
+    final double safePagePosition = pagePosition.isNaN ? 0.0 : pagePosition;
 
     if (safePagePosition > 1.0) {
       return 1.0;
@@ -104,12 +103,17 @@ class PageTransformer extends StatefulWidget {
 }
 
 class _PageTransformerState extends State<PageTransformer> {
-  PageVisibilityResolver _visibilityResolver;
+  PageVisibilityResolver? _visibilityResolver; // Update to allow nullable values
 
   @override
   Widget build(BuildContext context) {
     final pageView = widget.pageViewBuilder(
-        context, _visibilityResolver ?? PageVisibilityResolver());
+      context,
+      _visibilityResolver ?? PageVisibilityResolver(
+        metrics: PageMetrics(), // Set default metrics when _visibilityResolver is null
+        viewPortFraction: 1.0, // Set default viewPortFraction when _visibilityResolver is null
+      ),
+    );
 
     final controller = pageView.controller;
     final viewPortFraction = controller.viewportFraction;
@@ -122,6 +126,7 @@ class _PageTransformerState extends State<PageTransformer> {
             viewPortFraction: viewPortFraction,
           );
         });
+        return true;
       },
       child: pageView,
     );
