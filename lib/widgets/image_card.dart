@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 
 import 'package:wedding_invitation_flutter/model/image.dart';
