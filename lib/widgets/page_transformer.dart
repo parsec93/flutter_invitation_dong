@@ -9,8 +9,8 @@ typedef PageView PageViewBuilder(
 /// the current page.
 class PageVisibilityResolver {
   PageVisibilityResolver({
-    ScrollMetrics metrics,
-    double viewPortFraction,
+    required ScrollMetrics metrics,
+    required double viewPortFraction,
   })  : this._pageMetrics = metrics,
         this._viewPortFraction = viewPortFraction;
 
@@ -61,8 +61,8 @@ class PageVisibilityResolver {
 /// A class that contains visibility information about the current page.
 class PageVisibility {
   PageVisibility({
-    @required this.visibleFraction,
-    @required this.pagePosition,
+    required this.visibleFraction,
+    required this.pagePosition,
   });
 
   /// How much of the page is currently visible, between 0.0 and 1.0.
