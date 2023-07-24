@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import '../model/image.dart';
+import 'image_card.dart';
+
 /// A function that builds a [PageView] lazily.
 typedef PageView PageViewBuilder(
     BuildContext context, PageVisibilityResolver visibilityResolver);
@@ -93,7 +96,7 @@ class PageVisibility {
 /// to easily do it, in the form of [PageVisibility].
 class PageTransformer extends StatefulWidget {
   PageTransformer({
-    @required this.pageViewBuilder,
+    required this.pageViewBuilder,
   });
 
   final PageViewBuilder pageViewBuilder;
