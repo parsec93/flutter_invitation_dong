@@ -104,16 +104,23 @@ class PageTransformer extends StatefulWidget {
 
 class _PageTransformerState extends State<PageTransformer> {
   PageVisibilityResolver? _visibilityResolver; // Update to allow nullable values
-
+      
   @override
   Widget build(BuildContext context) {
-    final pageView = widget.pageViewBuilder(
-      context,
-      _visibilityResolver ?? PageVisibilityResolver(
-        metrics: PageMetrics(), // Set default metrics when _visibilityResolver is null
-        viewPortFraction: 1.0, // Set default viewPortFraction when _visibilityResolver is null
-      ),
+    final pageView = PageView.builder(
+      controller: PageController(viewportFraction: 0.85),
+      itemCount: imageItems.length, // Replace with the actual number of items
+      itemBuilder: (context, index) {
+        final item = imageItems[index];
+        final pageVisibility = _visibilityResolver?.resolvePageVisibility(index);
+
+        return ImageCardItem(
+          item: item,
+          pageVisibility: pageVisibility ?? PageVisibility(visibleFraction: 1.0, pagePosition: 0.0),
+        );
+      },
     );
+      
 
     final controller = pageView.controller;
     final viewPortFraction = controller.viewportFraction;
